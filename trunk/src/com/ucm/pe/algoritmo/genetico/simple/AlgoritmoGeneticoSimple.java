@@ -4,6 +4,7 @@
 package com.ucm.pe.algoritmo.genetico.simple;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import com.ucm.pe.problemas.funciones.CromosomaF1;
@@ -128,11 +129,43 @@ public class AlgoritmoGeneticoSimple {
 				//cadena booleana de la padre
 				Gen gen_padre = padre.genes.get(j);
 				ArrayList<Boolean> info_genetica_padre = gen_padre.getInformacion_genetica();
+				System.out.println("ANTES DE MEZCLAR");
+				System.out.println("PA==>"+toPrint(info_genetica_padre));
+				System.out.println("MA==>"+toPrint(info_genetica_madre));
+				System.out.println("H1==>"+toPrint(info_genetica_hijo));
+				System.out.println("H2==>"+toPrint(info_genetica_hijo2));
 				//intercambiamos la info
-				for (int i=punto_cruce; i<longitud_crmosoma; i++){
-					info_genetica_hijo.set(i, info_genetica_madre.get(i));
-					info_genetica_hijo2.set(i, info_genetica_padre.get(i));
+				/*
+				 * Despues de muchas pruebas y debug, he llegado a la conclusión que
+				 * el clone no copia bien los datos del gen, por lo que hay que generar
+				 * los arrays de cromosomas desde 0;
+				 */
+				for (int i=punto_cruce; i<longitud_crmosoma && info_genetica_madre!=info_genetica_padre; i++){
+//					System.out.println("-------------------------------------------");
+//					System.out.println(info_genetica_hijo.get(i)+"VS"+info_genetica_madre.get(i));
+//					System.out.println(info_genetica_hijo2.get(i)+"VS"+info_genetica_padre.get(i));
+//					System.out.println("-------------------------------------------");
+					info_genetica_hijo.set(i, info_genetica_madre.get(i)); //hijo 1 clon padre
+					info_genetica_hijo2.set(i, info_genetica_padre.get(i)); //hijo 2 clon madre
+//					System.out.println("MH1==>"+toPrint(info_genetica_hijo));
+//					System.out.println("MH2==>"+toPrint(info_genetica_hijo2));
 				}
+//				ArrayList<Boolean> info_genetica_hijo = new ArrayList<Boolean>();
+//				ArrayList<Boolean> info_genetica_hijo2 = new ArrayList<Boolean>();
+//				for (int i=0; i<longitud_crmosoma && info_genetica_madre!=info_genetica_padre; i++){
+//					if (i < punto_cruce){
+//						info_genetica_hijo.add(info_genetica_padre.get(i));
+//						info_genetica_hijo2.add(info_genetica_madre.get(i));
+//					}else{
+//						info_genetica_hijo.add(info_genetica_madre.get(i));
+//						info_genetica_hijo2.add(info_genetica_padre.get(i));
+//					}
+//				}
+				System.out.println("DESPUES DE MEZCLAR");
+				System.out.println("PA==>"+toPrint(info_genetica_padre));
+				System.out.println("MA==>"+toPrint(info_genetica_madre));
+				System.out.println("H1==>"+toPrint(info_genetica_hijo));
+				System.out.println("H2==>"+toPrint(info_genetica_hijo2));
 				hijo_1.genes.get(j).setInformacion_genetica(info_genetica_hijo);
 				hijo_2.genes.get(j).setInformacion_genetica(info_genetica_hijo2);
 			}
@@ -142,9 +175,10 @@ public class AlgoritmoGeneticoSimple {
 			/*
 			 * TODO aqui se pueden meter nuevas estrategias de sustitución
 			 */
+			System.out.println("PUNTO DE CRUCE===>"+punto_cruce);
 			System.out.println("PADRE===>"+padre.toString()+"||"+padre.genes.get(0).toString());
-			System.out.println("MADRE===>"+madre.toString()+"||"+madre.genes.get(0).toString());
 			System.out.println("HIJO MEZCLADO 1 ======>"+hijo_1.toString()+"||"+hijo_1.genes.get(0).toString());
+			System.out.println("MADRE===>"+madre.toString()+"||"+madre.genes.get(0).toString());
 			System.out.println("HIJO MEZCLADO -2- ======>"+hijo_2.toString()+"||"+hijo_2.genes.get(0).toString());
 			poblacion.set(indice_padre, hijo_1);
 			poblacion.set(indice_madre, hijo_2);
@@ -212,9 +246,9 @@ public class AlgoritmoGeneticoSimple {
 			Cromosoma individuo = poblacion.get(i);
 			if(individuo.aptitud_cromosoma > aptitud_mejor){
 				posicion_mejor=i;
-				aptitud_mejor = individuo.evalua();
+				aptitud_mejor = individuo.aptitud_cromosoma;
 			}
-			suma_aptitud = suma_aptitud + individuo.evalua();
+			suma_aptitud = suma_aptitud + individuo.aptitud_cromosoma;
 		}
 		//actualizamos las variables de muestreo
 		mejor_generacion_actual[generacion_actual] = aptitud_mejor;
@@ -230,7 +264,6 @@ public class AlgoritmoGeneticoSimple {
 		}
 		if(solucion==null ){ // si es el primero se asigna
 			solucion=poblacion.get(0);
-			posicion_mejor=0;
 		}
 //		//comprobamos si supera el que llevamos para la solución.
 //		if(solucion.aptitud_cromosoma< poblacion.get(posicion_mejor).aptitud_cromosoma){
@@ -271,10 +304,56 @@ public class AlgoritmoGeneticoSimple {
 	}
 
 	private void obtener_parametros() {
-		tamanio_poblacion=10;
+		tamanio_poblacion=100;
 		probabilidad_cruce=0.7;
-		num_max_generaciones=10;
+		num_max_generaciones=100;
 		probabilidad_mutacion=0.01;
 		tolerancia=0.0001;
+	}
+	
+	public static String toPrint(ArrayList<Boolean> array) {
+		// TODO Auto-generated method stub
+		Iterator  it = array.iterator();
+		String bits = "";
+		while(it.hasNext()){
+			if ((Boolean)it.next()){
+				bits = bits +"1";
+			}else
+				bits = bits +"0";
+		}
+		return bits;
+	}
+	
+	public static void main(String[] args) {
+		double[] vrmin = {0};
+		double[] vrmax = {32};
+		CromosomaF1 c1 = new CromosomaF1(1, vrmin, vrmax, 0.0001);
+		CromosomaF1 c2 = new CromosomaF1(1, vrmin, vrmax, 0.0001);
+		System.out.println(c1.toString());
+		System.out.println(c2.toString());
+		ArrayList<Boolean> gc1 = c1.genes.get(0).getInformacion_genetica();
+		ArrayList<Boolean> gc2 = c2.genes.get(0).getInformacion_genetica();
+		System.out.println("G1="+toPrint(gc1));
+		System.out.println("G2="+toPrint(gc2));
+		try {
+			CromosomaF1 c3 = (CromosomaF1) c2.clone();
+			System.out.println(c3.toString());
+			ArrayList<Boolean> gc3 = c3.genes.get(0).getInformacion_genetica();
+			System.out.println("G3="+toPrint(gc3));
+			for (int i = 0; i < 15; i++) {
+				gc3.set(i, gc1.get(i));
+			}
+			c3.evaluaRecalcula(1);
+			System.out.println(c2);
+			System.out.println(c3);
+			System.out.println("G3="+toPrint(gc3));
+			System.out.println("G2="+toPrint(gc2));
+			System.out.println("G1="+toPrint(gc1));
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }

@@ -38,12 +38,7 @@ public abstract class Cromosoma implements Cloneable{
 	
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		//de momento lo dejamos así, no sé si se necesitará algo más.
-		return super.clone();
-	}
-
+	protected abstract Object clone() throws CloneNotSupportedException;
 	public abstract double evalua();
 	public abstract double fenotipo();
 	public abstract void evaluaRecalcula(int num_genes);
