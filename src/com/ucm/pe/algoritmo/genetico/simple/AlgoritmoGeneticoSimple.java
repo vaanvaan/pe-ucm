@@ -59,10 +59,10 @@ public class AlgoritmoGeneticoSimple {
 		boolean mutado;
 		double probabilidad;
 		Random r=new Random();
-		int num_genes = poblacion.get(0).longitud_cromosoma;
+		int num_genes = poblacion.get(0).numero_genes;
 		for(int i=0; i<tamanio_poblacion; i++){
 			mutado = false;
-			for(int j=0; j<poblacion.get(i).longitud_cromosoma; j++){
+			for(int j=0; j<poblacion.get(i).numero_genes; j++){
 				probabilidad = r.nextDouble();
 				if(probabilidad < probabilidad_mutacion){
 					//el 0 indica el gen en el que muta hay que poder soportar diferentes genes
@@ -96,6 +96,7 @@ public class AlgoritmoGeneticoSimple {
 			cont_cruces--;
 		}
 		
+		System.out.println("INDICES DE CRUCE =====> "+indices_cruce.toString());
 		int longitud_cromosoma=poblacion.get(0).longitud_cromosoma;
 		int punto_cruce = r.nextInt(longitud_cromosoma);
 		for(int i=0; i<cont_cruces; i+=2){
@@ -107,27 +108,33 @@ public class AlgoritmoGeneticoSimple {
 	private void realizaCruce(int indice_padre, int indice_madre, int punto_cruce, int longitud_crmosoma) {
 		// TODO Auto-generated method stub
 		try{
-			Cromosoma hijo_1= (Cromosoma) poblacion.get(indice_padre).clone();
-			Cromosoma hijo_2= (Cromosoma) poblacion.get(indice_madre).clone();
+			Cromosoma padre = poblacion.get(indice_padre);
+			Cromosoma madre = poblacion.get(indice_madre);
+			Cromosoma hijo_1= (Cromosoma) padre.clone();
+			Cromosoma hijo_2= (Cromosoma) madre.clone();
+			System.out.println("PADRE===>"+hijo_1.toString()+"||"+hijo_1.genes.get(0).toString());
+			System.out.println("MADRE===>"+hijo_2.toString()+"||"+hijo_2.genes.get(0).toString());
 			//de momento se hace el cruce en cada uno de los genes del individuo
 			for (int j=0; j < hijo_1.numero_genes;j++){
 				// cadena booleana del hijo parte padre
 				Gen gen_h1= hijo_1.genes.get(j);
 				ArrayList<Boolean> info_genetica_hijo = gen_h1.getInformacion_genetica();
 				//cadena booleana de la madre
-				Gen gen_madre = poblacion.get(indice_madre).genes.get(j);
+				Gen gen_madre = madre.genes.get(j);
 				ArrayList<Boolean> info_genetica_madre = gen_madre.getInformacion_genetica();
 				// cadena booleana del hijo parte madre
 				Gen gen_h2= hijo_2.genes.get(j);
 				ArrayList<Boolean> info_genetica_hijo2 = gen_h2.getInformacion_genetica();
 				//cadena booleana de la padre
-				Gen gen_padre = poblacion.get(indice_padre).genes.get(j);
+				Gen gen_padre = padre.genes.get(j);
 				ArrayList<Boolean> info_genetica_padre = gen_padre.getInformacion_genetica();
 				//intercambiamos la info
 				for (int i=punto_cruce; i<longitud_crmosoma; i++){
 					info_genetica_hijo.set(i, info_genetica_madre.get(i));
 					info_genetica_hijo2.set(i, info_genetica_padre.get(i));
 				}
+				hijo_1.genes.get(j).setInformacion_genetica(info_genetica_hijo);
+				hijo_2.genes.get(j).setInformacion_genetica(info_genetica_hijo2);
 			}
 			hijo_1.evaluaRecalcula(hijo_1.numero_genes);
 			hijo_2.evaluaRecalcula(hijo_2.numero_genes);
@@ -135,6 +142,10 @@ public class AlgoritmoGeneticoSimple {
 			/*
 			 * TODO aqui se pueden meter nuevas estrategias de sustitución
 			 */
+			System.out.println("PADRE===>"+padre.toString()+"||"+padre.genes.get(0).toString());
+			System.out.println("MADRE===>"+madre.toString()+"||"+madre.genes.get(0).toString());
+			System.out.println("HIJO MEZCLADO 1 ======>"+hijo_1.toString()+"||"+hijo_1.genes.get(0).toString());
+			System.out.println("HIJO MEZCLADO -2- ======>"+hijo_2.toString()+"||"+hijo_2.genes.get(0).toString());
 			poblacion.set(indice_padre, hijo_1);
 			poblacion.set(indice_madre, hijo_2);
 		}catch (ClassCastException e) {
@@ -169,6 +180,7 @@ public class AlgoritmoGeneticoSimple {
 					pos_superviviente++;
 				}
 				nueva_pob.add((Cromosoma) poblacion.get(pos_superviviente).clone());
+				System.out.println("SELECCION====> nodo seleccionado====>"+poblacion.get(pos_superviviente).toString());
 			}
 			poblacion=nueva_pob;
 		} catch (CloneNotSupportedException e) {
@@ -182,8 +194,8 @@ public class AlgoritmoGeneticoSimple {
 		boolean terminado=false;
 		if (generacion_actual>=num_max_generaciones-1) //TODO Falta convergencia
 			terminado=true;
-		System.out.println("HEMOS ACABADO");
-		System.out.println("EL MEJOR ES" + solucion.fenotipo);
+		System.out.println("NO HEMOS ACABADO");
+		System.out.println("EL MEJOR POR AHORA ES" + solucion.toString());
 		return terminado;
 	}
 
@@ -231,6 +243,7 @@ public class AlgoritmoGeneticoSimple {
 		if (solucion==null || aptitud_mejor>solucion.aptitud_cromosoma){
 			try {
 				solucion=(Cromosoma) poblacion.get(posicion_mejor).clone();
+				System.out.println("EL MEJOR POR AHORA ES:"+solucion.toString());
 			} catch (CloneNotSupportedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -251,6 +264,7 @@ public class AlgoritmoGeneticoSimple {
 			double[] min = {0};
 			double[] max = {32};
 			poblacion.add(new CromosomaF1(1,min,max,tolerancia));
+			System.out.println("Inicializacion===>"+poblacion.get(i).toString());
 		}
 		maximizacion=true;
 		//fin para la primera funcion
