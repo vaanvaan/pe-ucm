@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Random;
 
 import com.ucm.pe.problemas.funciones.CromosomaF1;
+import com.ucm.pe.problemas.funciones.CromosomaF2;
+import com.ucm.pe.problemas.funciones.CromosomaF3;
 
 
 /**
@@ -32,6 +34,7 @@ public class AlgoritmoGeneticoSimple {
 	private double[] mejor_generacion_actual;
 	private double[] media_generacion_actual;
 	private double[] mejor_sobre_generacional;
+	private int funcion;
 	
 	public AlgoritmoGeneticoSimple() {
 		// TODO Auto-generated constructor stub
@@ -140,7 +143,7 @@ public class AlgoritmoGeneticoSimple {
 				 * el clone no copia bien los datos del gen, por lo que hay que generar
 				 * los arrays de cromosomas desde 0;
 				 */
-				for (int i=punto_cruce; i<longitud_crmosoma && info_genetica_madre!=info_genetica_padre; i++){
+				for (int i=punto_cruce; i<hijo_1.genes.get(j).getNum_caracteres_gen() && info_genetica_madre!=info_genetica_padre; i++){
 //					System.out.println("-------------------------------------------");
 //					System.out.println(info_genetica_hijo.get(i)+"VS"+info_genetica_madre.get(i));
 //					System.out.println(info_genetica_hijo2.get(i)+"VS"+info_genetica_padre.get(i));
@@ -242,6 +245,11 @@ public class AlgoritmoGeneticoSimple {
 		//..
 		//si es maximización o minimización
 		//
+		if(maximizacion){
+			revisaAdaptacionMaximizacion();
+		}else{
+			revisaAdaptacionMinimizacion();
+		}
 		for(int i=0; i<tamanio_poblacion; i++){
 			Cromosoma individuo = poblacion.get(i);
 			if(individuo.aptitud_cromosoma > aptitud_mejor){
@@ -284,6 +292,51 @@ public class AlgoritmoGeneticoSimple {
 		}
 //		if()
 	}
+	
+	public void revisaAdaptacionMinimizacion(){
+		double cmax = Double.NEGATIVE_INFINITY;
+		double valor;
+		// Calcula el maximo en valor
+		for(int i = 0; i<tamanio_poblacion;i++){
+			valor=poblacion.get(i).evalua();
+			if(valor>cmax){
+				cmax = valor;
+			}
+		}
+		cmax =cmax* 1.05;
+		
+		// Actualiza adaptaciones
+		for(int i = 0; i<tamanio_poblacion;i++){
+			poblacion.get(i).aptitud_cromosoma=cmax-poblacion.get(i).evalua();
+		}
+		// Actualiza la adaptación del mejor
+		if(solucion!=null){
+			solucion.aptitud_cromosoma=cmax-solucion.evalua();
+		}
+	}
+	
+	public void revisaAdaptacionMaximizacion(){
+		// Calcula el minimo
+		double cmin = Double.POSITIVE_INFINITY;
+		double valor;
+		for(int i = 0; i<tamanio_poblacion;i++){
+			valor=poblacion.get(i).evalua();
+			if(valor<cmin){
+				cmin = valor;
+			}
+		}
+		// Valor absoluto del minimo
+		cmin=Math.abs(cmin);
+		
+		// Actualiza adaptaciones
+		for(int i = 0; i<tamanio_poblacion;i++){
+			poblacion.get(i).aptitud_cromosoma=cmin+poblacion.get(i).evalua();
+		}
+		// Actualiza adaptacion del mejor
+		if(solucion!=null){
+			solucion.aptitud_cromosoma=cmin+solucion.evalua();
+		}
+	}
 
 	private void inicializaPoblacion() {
 		// TODO Auto-generated method stub
@@ -292,15 +345,38 @@ public class AlgoritmoGeneticoSimple {
 		mejor_sobre_generacional= new double[num_max_generaciones];
 		generacion_actual=0;
 		poblacion = new ArrayList<Cromosoma>(tamanio_poblacion);
-		//para la función 1
-		for (int i = 0; i < tamanio_poblacion; i++) {
-			double[] min = {0};
-			double[] max = {32};
-			poblacion.add(new CromosomaF1(1,min,max,tolerancia));
-			System.out.println("Inicializacion===>"+poblacion.get(i).toString());
+		if (funcion==1){
+			//para la función 1
+			for (int i = 0; i < tamanio_poblacion; i++) {
+				double[] min = {0};
+				double[] max = {32};
+				poblacion.add(new CromosomaF1(1,min,max,tolerancia));
+				System.out.println("Inicializacion===>"+poblacion.get(i).toString());
+			}
+			maximizacion=true;
+			//fin para la primera funcion
 		}
-		maximizacion=true;
-		//fin para la primera funcion
+		if(funcion == 2){
+			for (int i = 0; i < tamanio_poblacion; i++) {
+				double[] min = {-3.0,4.1};
+				double[] max = {12.1,5.8};
+				int num_genes_f2=2;
+				poblacion.add(new CromosomaF2(num_genes_f2,min,max,tolerancia));
+				System.out.println("Inicializacion===>"+poblacion.get(i).toString());
+			}
+			maximizacion=true;
+		}
+		if(funcion == 3){
+			for (int i = 0; i < tamanio_poblacion; i++) {
+				double[] min = {-250};
+				double[] max = {250};
+				int num_genes_f3=1;
+				poblacion.add(new CromosomaF3(num_genes_f3,min,max,tolerancia));
+				System.out.println("Inicializacion===>"+poblacion.get(i).toString());
+			}
+			maximizacion=false;
+		}
+		
 	}
 
 	private void obtener_parametros() {
@@ -309,6 +385,7 @@ public class AlgoritmoGeneticoSimple {
 		num_max_generaciones=100;
 		probabilidad_mutacion=0.01;
 		tolerancia=0.0001;
+		funcion=3;
 	}
 	
 	public static String toPrint(ArrayList<Boolean> array) {

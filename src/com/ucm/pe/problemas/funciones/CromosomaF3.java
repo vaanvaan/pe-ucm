@@ -13,22 +13,22 @@ import com.ucm.pe.algoritmo.genetico.simple.Gen;
  * @author Ivan
  *
  */
-public class CromosomaF1 extends Cromosoma{
+public class CromosomaF3 extends Cromosoma{
 	private double evaluacion;
 	private double[] fenotipo;
 	
-	public CromosomaF1() {
+	public CromosomaF3() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public CromosomaF1(int num_genes, double[] valor_rango_min, double[] valor_rango_max , double precision) {
+	public CromosomaF3(int num_genes, double[] valor_rango_min, double[] valor_rango_max , double precision) {
 		super(num_genes, valor_rango_min, valor_rango_max, precision);
 		evaluacion = 0;
 		fenotipo=new double[num_genes];
 		fenotipo[num_genes-1] = genes.get(num_genes-1).getFenotipo();
 		double e = (double)Math.E;
 		double pi = (double)Math.PI;
-		evaluacion = 20 + e - 20.0 * Math.pow(e,-0.2*Math.abs(fenotipo[num_genes-1])) -Math.pow(e, Math.cos(2.0*pi*fenotipo[num_genes-1]));
+		evaluacion = -Math.abs(fenotipo[num_genes-1]*Math.sin(Math.sqrt(Math.abs(fenotipo[num_genes-1]))));
 		// parece redundancia de datos :(
 		aptitud_cromosoma=evaluacion;
 		super.fenotipo=this.fenotipo;
@@ -52,7 +52,7 @@ public class CromosomaF1 extends Cromosoma{
 		fenotipo[num_genes-1] = genes.get(num_genes-1).recalculaFenotipo();
 		double e = (double)Math.E;
 		double pi = (double)Math.PI;
-		evaluacion = 20 + e - 20.0 * Math.pow(e,-0.2*Math.abs(fenotipo[num_genes-1])) -Math.pow(e, Math.cos(2.0*pi*fenotipo[num_genes-1]));
+		evaluacion = -Math.abs(fenotipo[num_genes-1]*Math.sin(Math.sqrt(Math.abs(fenotipo[num_genes-1]))));
 		aptitud_cromosoma=evaluacion;
 		super.fenotipo=this.fenotipo;
 	}
@@ -66,7 +66,7 @@ public class CromosomaF1 extends Cromosoma{
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
-		CromosomaF1 copia= new CromosomaF1();
+		CromosomaF3 copia= new CromosomaF3();
 		copia.aptitud_cromosoma=aptitud_cromosoma;
 		copia.evaluacion=evaluacion;
 		copia.fenotipo=fenotipo;
