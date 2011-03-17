@@ -105,4 +105,29 @@ public class Gen {
 		return gen;
 	}
 
+	public double recalculaFenotipo() {
+		fenotipo = (limite_valor_minimo + 
+				(limite_valor_maximo - limite_valor_minimo)
+				* bin_a_dec(informacion_genetica) / (Math.pow(2,num_caracteres_gen) - 1));
+		return fenotipo;
+	}
+
+	public Gen copia() {
+		Gen copia = new Gen();
+		copia.num_caracteres_gen = num_caracteres_gen;
+		copia.limite_valor_minimo = limite_valor_minimo;
+		copia.limite_valor_maximo = limite_valor_maximo;
+		ArrayList<Boolean> info_genet_copy = new ArrayList<Boolean>();
+		Iterator it = informacion_genetica.iterator();
+		while (it.hasNext()) {
+			Boolean caracter_gen = (Boolean) it.next();
+			info_genet_copy.add(new Boolean(caracter_gen));
+		}
+		copia.informacion_genetica=info_genet_copy;
+		copia.fenotipo=fenotipo;
+		return copia;
+	}
+	
+	
+
 }
