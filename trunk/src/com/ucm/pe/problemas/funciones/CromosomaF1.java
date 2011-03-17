@@ -20,6 +20,9 @@ public class CromosomaF1 extends Cromosoma{
 		double e = (double)Math.E;
 		double pi = (double)Math.PI;
 		evaluacion = 20 + e - 20.0 * Math.pow(e,-0.2*Math.abs(fenotipo)) -Math.pow(e, Math.cos(2.0*pi*fenotipo));
+		// parece redundancia de datos :(
+		aptitud_cromosoma=evaluacion;
+		super.fenotipo=this.fenotipo;
 	}
 
 	@Override
@@ -41,6 +44,14 @@ public class CromosomaF1 extends Cromosoma{
 		double e = (double)Math.E;
 		double pi = (double)Math.PI;
 		evaluacion = 20 + e - 20.0 * Math.pow(e,-0.2*Math.abs(fenotipo)) -Math.pow(e, Math.cos(2.0*pi*fenotipo));
+		aptitud_cromosoma=evaluacion;
+		super.fenotipo=this.fenotipo;
+	}
+	
+	@Override
+	public String toString() {
+		String descrip = "Feno="+fenotipo+"||Eval="+evaluacion;
+		return descrip;
 	}
 	
 }

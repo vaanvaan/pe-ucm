@@ -30,8 +30,8 @@ public abstract class Cromosoma implements Cloneable{
 		genes= new ArrayList<Gen>(numero_genes);
 		for (int i = 0; i < numero_genes; i++) {
 			genes.add(new Gen(valor_rango_min[i], valor_rango_max[i],precision));
-			longitud_cromosoma++;
 		}
+		longitud_cromosoma=genes.get(0).getNum_caracteres_gen();
 		aptitud_cromosoma=evalua();
 		fenotipo=fenotipo();
 	}

@@ -4,6 +4,7 @@
 package com.ucm.pe.algoritmo.genetico.simple;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -26,7 +27,15 @@ public class Gen {
 	public void setFenotipo(double fenotipo) {
 		this.fenotipo = fenotipo;
 	}
+	
+	public int getNum_caracteres_gen() {
+		return num_caracteres_gen;
+	}
 
+	public void setNum_caracteres_gen(int num_caracteres_gen) {
+		this.num_caracteres_gen = num_caracteres_gen;
+	}
+	
 	public Gen() {
 		// TODO Auto-generated constructor stub
 	}
@@ -81,5 +90,19 @@ public class Gen {
 		return res;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		Iterator  it = informacion_genetica.iterator();
+		String bits = "";
+		while(it.hasNext()){
+			if ((Boolean)it.next()){
+				bits = bits +"1";
+			}else
+				bits = bits +"0";
+		}
+		String gen = "GEN==>"+bits;
+		return gen;
+	}
 
 }
