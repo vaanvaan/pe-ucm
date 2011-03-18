@@ -10,6 +10,8 @@ import java.util.Random;
 import com.ucm.pe.problemas.funciones.CromosomaF1;
 import com.ucm.pe.problemas.funciones.CromosomaF2;
 import com.ucm.pe.problemas.funciones.CromosomaF3;
+import com.ucm.pe.problemas.funciones.CromosomaF4;
+import com.ucm.pe.problemas.funciones.CromosomaF5;
 
 
 /**
@@ -265,7 +267,7 @@ public class AlgoritmoGeneticoSimple {
 		//Asignación de la puntucaión y pontuación acumulada por individuo
 		for (int i=0; i<tamanio_poblacion; i++){
 			Cromosoma individuo = poblacion.get(i);
-			double puntuacion = individuo.evalua()/suma_aptitud;
+			double puntuacion = individuo.aptitud_cromosoma/suma_aptitud;
 			punt_acumulada = punt_acumulada + puntuacion;
 			individuo.puntuacion_individuo=puntuacion;
 			individuo.puntuacion_acumulada=punt_acumulada;
@@ -297,16 +299,18 @@ public class AlgoritmoGeneticoSimple {
 		double cmax = Double.NEGATIVE_INFINITY;
 		double valor;
 		// Calcula el maximo en valor
-		for(int i = 0; i<tamanio_poblacion;i++){
-			valor=poblacion.get(i).evalua();
-			if(valor>cmax){
+		for (Cromosoma crom : poblacion) {
+			valor=crom.evalua();
+//			System.out.println(valor+"VS"+cmax);
+			if(valor > cmax){
 				cmax = valor;
 			}
 		}
-		cmax =cmax* 1.05;
+		cmax = cmax* 1.00;
 		
 		// Actualiza adaptaciones
 		for(int i = 0; i<tamanio_poblacion;i++){
+//			System.out.println("Resta==>"+(cmax-poblacion.get(i).evalua()));
 			poblacion.get(i).aptitud_cromosoma=cmax-poblacion.get(i).evalua();
 		}
 		// Actualiza la adaptación del mejor
@@ -376,16 +380,39 @@ public class AlgoritmoGeneticoSimple {
 			}
 			maximizacion=false;
 		}
+		if(funcion==4){
+			int n = 3;
+			int num_genes_f4 = n;
+			double[] min = new double[n];
+			double[] max = new double[n];
+			for(int i=0;i<n;i++){
+				min[i] = 0;
+				max[i] = 100;
+			}
+			for(int i=0;i<tamanio_poblacion;i++){
+				poblacion.add(new CromosomaF4(num_genes_f4,min,max,tolerancia));
+			}
+			maximizacion = false;
+		}
+		if(funcion==5){
+			int num_genes_f5 = 2;
+			double[] min = {-10,-10};
+			double[] max = {10,10};
+			for(int i=0;i<tamanio_poblacion;i++){
+				poblacion.add(new CromosomaF5(num_genes_f5,min,max,tolerancia));
+			}
+			maximizacion = false;
+		}
 		
 	}
 
 	private void obtener_parametros() {
 		tamanio_poblacion=100;
-		probabilidad_cruce=0.7;
+		probabilidad_cruce=0.6;
 		num_max_generaciones=100;
-		probabilidad_mutacion=0.01;
+		probabilidad_mutacion=0.05;
 		tolerancia=0.0001;
-		funcion=3;
+		funcion=5;
 	}
 	
 	public static String toPrint(ArrayList<Boolean> array) {

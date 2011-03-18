@@ -13,22 +13,31 @@ import com.ucm.pe.algoritmo.genetico.simple.Gen;
  * @author Ivan
  *
  */
-public class CromosomaF3 extends Cromosoma{
+public class CromosomaF5 extends Cromosoma{
 	private double evaluacion;
 	private double[] fenotipo;
 	
-	public CromosomaF3() {
+	public CromosomaF5() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public CromosomaF3(int num_genes, double[] valor_rango_min, double[] valor_rango_max , double precision) {
+	public CromosomaF5(int num_genes, double[] valor_rango_min, double[] valor_rango_max , double precision) {
 		super(num_genes, valor_rango_min, valor_rango_max, precision);
 		evaluacion = 0;
-		fenotipo=new double[num_genes];
-		fenotipo[num_genes-1] = genes.get(num_genes-1).getFenotipo();
-		evaluacion = -Math.abs(fenotipo[num_genes-1]*Math.sin(Math.sqrt(Math.abs(fenotipo[num_genes-1]))));
+		double x = (double) genes.get(0).getFenotipo();
+		double y = (double) genes.get(1).getFenotipo();
+		double parte_1 = 0;
+		double parte_2 = 0;
+		for (int i=1; i<=5; i++){
+			parte_1 = parte_1+i*Math.cos((i+1)*x+i);
+			parte_2 = parte_2+i*Math.cos((i+1)*y+i);
+		}	
+		evaluacion = parte_1 * parte_2;
 		// parece redundancia de datos :(
 		aptitud_cromosoma=evaluacion;
+		fenotipo = new double[num_genes];
+		fenotipo[0]=x;
+		fenotipo[1]=y;
 		super.fenotipo=this.fenotipo;
 	}
 
@@ -47,24 +56,35 @@ public class CromosomaF3 extends Cromosoma{
 	@Override
 	public void evaluaRecalcula(int num_genes) {
 		evaluacion = 0;
-		fenotipo[num_genes-1] = genes.get(num_genes-1).recalculaFenotipo();
-		double e = (double)Math.E;
-		double pi = (double)Math.PI;
-		evaluacion = -Math.abs(fenotipo[num_genes-1]*Math.sin(Math.sqrt(Math.abs(fenotipo[num_genes-1]))));
+		double x = (double) genes.get(0).getFenotipo();
+		double y = (double) genes.get(1).getFenotipo();
+		double parte_1 = 0;
+		double parte_2 = 0;
+		for (int i=1; i<=5; i++){
+			parte_1 = parte_1+i*Math.cos((i+1)*x+i);
+			parte_2 = parte_2+i*Math.cos((i+1)*y+i);
+		}	
+		evaluacion = parte_1 * parte_2;
 		aptitud_cromosoma=evaluacion;
+		fenotipo[0]=x;
+		fenotipo[1]=y;
 		super.fenotipo=this.fenotipo;
 	}
 	
 	@Override
 	public String toString() {
-		String descrip = "Feno="+fenotipo[numero_genes-1]+"||Eval="+evaluacion;
+		String descrip = "Feno=";
+		for (int i = 0; i < numero_genes; i++) {
+			descrip= descrip+fenotipo[i]+"||";
+		}
+		descrip=descrip+"||Eval="+evaluacion;
 		return descrip;
 	}
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		// TODO Auto-generated method stub
-		CromosomaF3 copia= new CromosomaF3();
+		CromosomaF5 copia= new CromosomaF5();
 		copia.aptitud_cromosoma=aptitud_cromosoma;
 		copia.evaluacion=evaluacion;
 		copia.fenotipo=fenotipo;
