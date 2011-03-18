@@ -42,6 +42,26 @@ public class AlgoritmoGeneticoSimple {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void lanzarAlgoritmo(int tam_pob,int num_max_gen,
+			int funcion,double prob_cruce,double prob_mut,double tolerancia) {
+		try {
+			//obtener_parametros();
+			set_parametros(tam_pob, num_max_gen, funcion, prob_cruce, prob_mut, tolerancia);
+			inicializaPoblacion();
+			evaluarPoblacion();
+			while(!terminado()){
+				generacion_actual++;
+				seleccion(tipo_metodo_seleccion);
+				reproduccion();
+				mutacion();
+				evaluarPoblacion();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 	public void lanzarAlgoritmo() {
 		try {
 			obtener_parametros();
@@ -59,7 +79,8 @@ public class AlgoritmoGeneticoSimple {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 	private void mutacion() {
 		// TODO Auto-generated method stub
 		boolean mutado;
@@ -233,8 +254,14 @@ public class AlgoritmoGeneticoSimple {
 		boolean terminado=false;
 		if (generacion_actual>=num_max_generaciones-1) //TODO Falta convergencia
 			terminado=true;
-		System.out.println("NO HEMOS ACABADO");
-		System.out.println("EL MEJOR POR AHORA ES" + solucion.toString());
+		if (!terminado){
+			System.out.println("NO HEMOS ACABADO");
+			System.out.println("EL MEJOR POR AHORA ES" + solucion.toString());
+		}
+		else{
+			System.out.println("ACABADO");
+			System.out.println("EL MEJOR ES" + solucion.toString());
+		}
 		return terminado;
 	}
 
@@ -412,7 +439,17 @@ public class AlgoritmoGeneticoSimple {
 		num_max_generaciones=100;
 		probabilidad_mutacion=0.05;
 		tolerancia=0.0001;
-		funcion=5;
+		funcion=2;
+	}
+	
+	private void set_parametros(int tam_pob,int num_max_gen,
+			int funcion,double prob_cruce,double prob_mut,double tolerancia) {
+		tamanio_poblacion=tam_pob;
+		probabilidad_cruce=prob_cruce;
+		num_max_generaciones=num_max_gen;
+		probabilidad_mutacion=prob_mut;
+		this.tolerancia=tolerancia;
+		this.funcion=funcion;
 	}
 	
 	public static String toPrint(ArrayList<Boolean> array) {
@@ -428,6 +465,21 @@ public class AlgoritmoGeneticoSimple {
 		return bits;
 	}
 	
+
+	/**
+	 * @return the mejor_generacion_actual
+	 */
+	public double[] getMejor_generacion_actual() {
+		return mejor_generacion_actual;
+	}
+
+	/**
+	 * @return the media_generacion_actual
+	 */
+	public double[] getMedia_generacion_actual() {
+		return media_generacion_actual;
+	}
+
 	public static void main(String[] args) {
 		double[] vrmin = {0};
 		double[] vrmax = {32};
@@ -457,7 +509,7 @@ public class AlgoritmoGeneticoSimple {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
+	
+	
 }
