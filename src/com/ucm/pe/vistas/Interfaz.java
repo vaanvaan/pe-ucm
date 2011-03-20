@@ -81,7 +81,7 @@ public class Interfaz extends JFrame {
 		rellenaConstraints(0, 2, 2, 2, GridBagConstraints.WEST);
 		pDatos.add(labPoblacion,cons);
 		
-		SpinnerNumberModel spinModel=new SpinnerNumberModel(50, 10, 100, 5);
+		SpinnerNumberModel spinModel=new SpinnerNumberModel(80, 10, 200, 5);
 		spinPoblacion=new JSpinner(spinModel);
 		rellenaConstraints(2, 2, 2, 2, GridBagConstraints.EAST);
 		pDatos.add(spinPoblacion,cons);
@@ -121,7 +121,7 @@ public class Interfaz extends JFrame {
 		rellenaConstraints(0, 10, 2, 2, GridBagConstraints.WEST);
 		pDatos.add(labProbMutacion,cons);
 		
-		spinModel=new SpinnerNumberModel(0.1,0,1,0.01);
+		spinModel=new SpinnerNumberModel(0.08,0,1,0.01);
 		spinProbMutacion=new JSpinner(spinModel);
 		rellenaConstraints(2, 10, 2, 2, GridBagConstraints.EAST);
 		pDatos.add(spinProbMutacion,cons);
@@ -136,9 +136,10 @@ public class Interfaz extends JFrame {
 		cons.ipadx=0;
 		pDatos.add(butEjecutar,cons);
 		
+		cons.ipady=0;
 		JPanel pSolucion=new JPanel();
 		pSolucion.setLayout(new GridBagLayout());
-		labFenotipo1=new JLabel();
+		labFenotipo1=new JLabel("X: ");
 		//rellenaConstraints(0, 13, 1, 1, GridBagConstraints.WEST);
 		//pDatos.add(labFenotipo1,cons);
 		rellenaConstraints(0, 0, 1, 1, GridBagConstraints.WEST);
@@ -148,14 +149,14 @@ public class Interfaz extends JFrame {
 		//pDatos.add(labFenotipo2,cons);
 		rellenaConstraints(1, 0, 1, 1, GridBagConstraints.WEST);
 		pSolucion.add(labFenotipo2,cons);
-		labFuncion=new JLabel();
+		labFuncion=new JLabel("F: ");
 		//rellenaConstraints(0, 14, 1, 1, GridBagConstraints.WEST);
 		//pDatos.add(labFuncion,cons);
 		rellenaConstraints(0, 1, 1, 1, GridBagConstraints.WEST);
 		pSolucion.add(labFuncion,cons);
 		pSolucion.setBorder(BorderFactory.createTitledBorder("Solucion"));
 		
-		rellenaConstraints(0, 13, 4, 1, GridBagConstraints.CENTER);
+		rellenaConstraints(0, 13, 4, 1, GridBagConstraints.WEST);
 		pDatos.add(pSolucion,cons);
 		pDatos.setBorder(BorderFactory.createTitledBorder("Datos"));
 		
