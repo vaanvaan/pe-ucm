@@ -289,9 +289,9 @@ public class AlgoritmoGeneticoSimple {
 		}
 		//actualizamos las variables de muestreo
 		mejor_generacion_actual[generacion_actual] = aptitud_mejor;
-		media_generacion_actual[generacion_actual] = suma_aptitud/tamanio_poblacion;
+		media_generacion_actual[generacion_actual] = suma_aptitud/(double)tamanio_poblacion;
 		
-		//Asignación de la puntucaión y pontuación acumulada por individuo
+		//Asignación de la puntucaión y puntuación acumulada por individuo
 		for (int i=0; i<tamanio_poblacion; i++){
 			Cromosoma individuo = poblacion.get(i);
 			double puntuacion = individuo.aptitud_cromosoma/suma_aptitud;
@@ -319,7 +319,9 @@ public class AlgoritmoGeneticoSimple {
 				e.printStackTrace();
 			}
 		}
-//		if()
+		//Actualizamos el mejor global
+		mejor_sobre_generacional[generacion_actual]=solucion.evalua();
+
 	}
 	
 	public void revisaAdaptacionMinimizacion(){
@@ -478,6 +480,20 @@ public class AlgoritmoGeneticoSimple {
 	 */
 	public double[] getMedia_generacion_actual() {
 		return media_generacion_actual;
+	}
+
+	/**
+	 * @return the mejor_sobre_generacional
+	 */
+	public double[] getMejor_sobre_generacional() {
+		return mejor_sobre_generacional;
+	}
+
+	/**
+	 * @return the solucion
+	 */
+	public Cromosoma getSolucion() {
+		return solucion;
 	}
 
 	public static void main(String[] args) {

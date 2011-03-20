@@ -45,7 +45,7 @@ public class CromosomaF1 extends Cromosoma{
 		// TODO Auto-generated method stub
 		return fenotipo;
 	}
-
+	
 	@Override
 	public void evaluaRecalcula(int num_genes) {
 		evaluacion = 0;
@@ -59,7 +59,7 @@ public class CromosomaF1 extends Cromosoma{
 	
 	@Override
 	public String toString() {
-		String descrip = "Feno="+fenotipo[numero_genes-1]+"||Eval="+evaluacion;
+		String descrip = "Feno= "+fenotipo[numero_genes-1]+" || Eval= "+evaluacion;
 		return descrip;
 	}
 

@@ -28,9 +28,10 @@ public class ListenerGUI implements ActionListener {
 			
 			double[] mejor_generaciones=ag.getMejor_generacion_actual();
 			double[] media_generaciones=ag.getMedia_generacion_actual();
-			interfaz.representaGrafica1(mejor_generaciones);
-			interfaz.representaGrafica2(media_generaciones);
-			
+			double[] mejor_global=ag.getMejor_sobre_generacional();
+			interfaz.representaGrafica1(mejor_global);
+			interfaz.representaGrafica2(mejor_generaciones,media_generaciones);
+			interfaz.representaSolucion(ag.getSolucion().evalua(),ag.getSolucion().fenotipo()[ag.getSolucion().numero_genes-1]);
     }
 
 

@@ -22,7 +22,7 @@ public class Interfaz extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLabel labFuncion,labPoblacion,labGeneracion,
-			labProbCruce,labProbMutacion,labPrecision;
+			labProbCruce,labProbMutacion,labPrecision, labFenotipo1, labFenotipo2, labValor;
 	private JComboBox comboFuncion;
 	private JSpinner spinPoblacion,spinGeneracion,spinProbCruce,
 			spinProbMutacion,spinPrecision;
@@ -136,6 +136,27 @@ public class Interfaz extends JFrame {
 		cons.ipadx=0;
 		pDatos.add(butEjecutar,cons);
 		
+		JPanel pSolucion=new JPanel();
+		pSolucion.setLayout(new GridBagLayout());
+		labFenotipo1=new JLabel();
+		//rellenaConstraints(0, 13, 1, 1, GridBagConstraints.WEST);
+		//pDatos.add(labFenotipo1,cons);
+		rellenaConstraints(0, 0, 1, 1, GridBagConstraints.WEST);
+		pSolucion.add(labFenotipo1,cons);
+		labFenotipo2=new JLabel();
+		//rellenaConstraints(2, 13, 1, 1, GridBagConstraints.WEST);
+		//pDatos.add(labFenotipo2,cons);
+		rellenaConstraints(1, 0, 1, 1, GridBagConstraints.WEST);
+		pSolucion.add(labFenotipo2,cons);
+		labFuncion=new JLabel();
+		//rellenaConstraints(0, 14, 1, 1, GridBagConstraints.WEST);
+		//pDatos.add(labFuncion,cons);
+		rellenaConstraints(0, 1, 1, 1, GridBagConstraints.WEST);
+		pSolucion.add(labFuncion,cons);
+		pSolucion.setBorder(BorderFactory.createTitledBorder("Solucion"));
+		
+		rellenaConstraints(0, 13, 4, 1, GridBagConstraints.CENTER);
+		pDatos.add(pSolucion,cons);
 		pDatos.setBorder(BorderFactory.createTitledBorder("Datos"));
 		
 		return pDatos;
@@ -194,14 +215,23 @@ public class Interfaz extends JFrame {
 	}
 
 
-	public void representaGrafica1(double[] mejorGeneraciones) {
+	public void representaGrafica1(double[] mejorGlobal) {
 		pGrafica1.removeAllPlots();
-		pGrafica1.addLinePlot("Mejor por generaciones", mejorGeneraciones);
+		pGrafica1.addLinePlot("Mejor global", mejorGlobal);
+		pGrafica1.addLegend("SOUTH");
 	}
 	
-	public void representaGrafica2(double[] mediaGeneraciones) {
-		pGrafica1.removeAllPlots();
-		pGrafica1.addLinePlot("Mejor por generaciones", mediaGeneraciones);
+	public void representaGrafica2(double[] mejorGeneraciones, double[] mediaGeneraciones) {
+		pGrafica2.removeAllPlots();
+		pGrafica2.addLinePlot("Mejor por generaciones", mejorGeneraciones);
+		pGrafica2.addLinePlot("Media por generaciones", mediaGeneraciones);
+		pGrafica2.addLegend("SOUTH");
+	}
+
+
+	public void representaSolucion(double evalua, double fenotipo) {
+		labFenotipo1.setText("X: "+fenotipo);
+		labFuncion.setText("F: "+evalua);
 	}	
 	
 	
